@@ -19,6 +19,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.RENOVATE_TOKEN || secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Recompute sha256 pins
         run: python3 scripts/update_pins.py
@@ -26,6 +27,7 @@ jobs:
       - name: Push pins to the PR branch
         env:
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          GH_TOKEN: ${{ secrets.RENOVATE_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           if git diff --quiet -- include/versions.yml; then
@@ -36,4 +38,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add include/versions.yml
           git commit -m "chore(deps): recompute sha256 pins"
+          git config --global http.https://github.com/.extraheader \
+            "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git push origin "HEAD:${HEAD_REF}"
