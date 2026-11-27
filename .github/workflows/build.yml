@@ -68,7 +68,7 @@ jobs:
           REF=$(sed -n 's/.*sbom-ref: "\([^"]*\)".*/\1/p' include/versions.yml)
           /tmp/sbom-venv/bin/pip install --quiet "git+https://gitlab.com/BuildStream/buildstream-sbom.git@${REF}"
           mkdir -p sbom_out
-          sudo env HOME="$HOME" /tmp/sbom-venv/bin/buildstream-sbom launcher/appimage.bst \
+          sudo env HOME="$HOME" PATH="/tmp/sbom-venv/bin:$PATH" /tmp/sbom-venv/bin/buildstream-sbom launcher/appimage.bst \
             --spdx-name emerald-launcher \
             --spdx-namespace "https://github.com/LCE-Hub/emerald-buildstream/sbom/${GITHUB_SHA}" \
             --spdx-creator "Tool: buildstream-sbom" \
