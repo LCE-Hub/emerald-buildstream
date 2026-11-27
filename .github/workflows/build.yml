@@ -56,13 +56,18 @@ jobs:
           just build
           just export
 
+      - name: Collect artifacts
+        run: |
+          mkdir -p artifacts
+          cp -a .build-out/. artifacts/
+          cp -a .build-out-binary/. artifacts/
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: emerald-launcher
-          path: |
-            .build-out/**
-            .build-out-binary/**
+          path: artifacts/**
+          if-no-files-found: error
           retention-days: 14
 
       - name: Save BuildStream cache
