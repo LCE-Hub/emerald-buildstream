@@ -2,7 +2,7 @@ name: security
 
 on:
   pull_request:
-    branches: [main, radium]
+    branches: [main, init, radium]
   workflow_dispatch:
 
 permissions: {}
