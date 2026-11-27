@@ -8,6 +8,7 @@ build-depends:
 - toolchains/nlohmann-json.bst
 - toolchains/stb.bst
 - toolchains/miniaudio.bst
+- toolchains/nanosvg.bst
 - freedesktop-sdk.bst:public-stacks/runtime-gnu.bst
 - freedesktop-sdk.bst:components/gcc.bst
 - freedesktop-sdk.bst:components/cmake.bst
@@ -30,7 +31,8 @@ config:
       -DEMERALD_USE_SYSTEM_DEPS=ON \
       -DEMERALD_BUILD_GOLDMAPPER=OFF \
       -DLAZULI_FETCH_DEPS=OFF \
-      -DEMERALD_SYSTEM_STB_DIR=/usr/include/stb
+      -DEMERALD_SYSTEM_STB_DIR=/usr/include/stb \
+      -DLAZULI_NANOSVG_INCLUDE_DIR=/usr/include/nanosvg
   - cmake --build build --parallel
   - |
     mkdir -p bundle/usr/share/emerald-launcher

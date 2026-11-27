@@ -10,3 +10,4 @@ variables:
   nlohmann-json-ref: "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03"
   stb-ref: "6b5799bae8a1fe3792691ef4b72ae26434c3e799"
   miniaudio-ref: "9634bedb5b5a2ca38c1ee7108a9358a4e233f14d"
+  nanosvg-ref: "239e102ec2c691f2902e20ace2ed36ee4a35cfe6"
