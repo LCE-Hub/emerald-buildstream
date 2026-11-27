@@ -4,6 +4,7 @@ description: Pinned Project Radium source tree and submodules
 
 build-depends:
 - freedesktop-sdk.bst:bootstrap/bash.bst
+- freedesktop-sdk.bst:bootstrap/coreutils.bst
 
 sources:
 - kind: git_repo
@@ -34,3 +35,8 @@ sources:
   path: src/discord_ipc_cpp
   url: github:LCE-Hub/discordipc
   ref: '%{discord-ipc-cpp-ref}'
+
+config:
+  install-commands:
+  - mkdir -p '%{install-root}/src'
+  - cp -a ./* '%{install-root}/src/'

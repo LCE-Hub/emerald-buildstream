@@ -25,7 +25,7 @@ build-depends:
 config:
   install-commands:
   - |
-    cmake -S . -B build \
+    cmake -S /src -B build \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=/usr \
       -DEMERALD_USE_SYSTEM_DEPS=ON \
@@ -37,10 +37,10 @@ config:
   - |
     mkdir -p bundle/usr/share/emerald-launcher
     install -Dm755 build/src/emerald-legacy-launcher bundle/usr/bin/emerald-legacy-launcher
-    cp -a public resources UiDocs bundle/usr/share/emerald-launcher/
-    install -Dm644 flatpak/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.desktop \
+    cp -a /src/public /src/resources /src/UiDocs bundle/usr/share/emerald-launcher/
+    install -Dm644 /src/flatpak/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.desktop \
       bundle/usr/share/applications/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.desktop
-    install -Dm644 public/images/icon.png \
+    install -Dm644 /src/public/images/icon.png \
       bundle/usr/share/icons/hicolor/512x512/apps/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.png
   - |
     tar --zstd -cf '%{install-root}/emerald-launcher.tar.zst' -C bundle \
