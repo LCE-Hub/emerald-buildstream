@@ -13,6 +13,7 @@ flatpak install --user -y flathub org.gnome.Platform//49 org.gnome.Sdk//49
 rm -rf "$SRC" "$REPO" build-flatpak
 just bst artifact checkout launcher/src.bst --directory "/src/${SRC}"
 sudo chown -R "$(id -u):$(id -g)" "$SRC"
+sed -i 's/--device=input/--device=all/' "$SRC/src/flatpak/$MANIFEST"
 
 cd "$SRC/src/flatpak"
 flatpak-builder --user --install-deps-from=flathub --force-clean --repo="../../${REPO}" build-flatpak "$MANIFEST"
