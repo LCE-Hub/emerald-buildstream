@@ -4,6 +4,8 @@ variables:
   plugins-ref: "2.8.0-0-g2681232038711d5c3d4ef1ecc962321c33ec72c1"
   community-plugins-sha256: "0a08a520fb2b717877025f30d6088c3da2c204b813a5d2d786d09acf988ef29b"
   sbom-ref: "0706fec3bedf6f73bd9d2fed32c2aed585feef8d"
+  actionlint-version: "1.7.12"
+  actionlint-sha256: "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
 
   appimagetool-version: "1.9.1"
   appimagetool-x86_64-sha256: "ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0"

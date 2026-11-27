@@ -15,6 +15,13 @@
       "matchStrings": ["appimagetool-version:\\s*\"(?<currentValue>[0-9.]+)\""],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "AppImage/appimagetool"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/versions\\.yml$/"],
+      "matchStrings": ["actionlint-version:\\s*\"(?<currentValue>[0-9.]+)\""],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "rhysd/actionlint"
     }
   ],
   "packageRules": [
