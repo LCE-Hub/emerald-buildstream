@@ -15,6 +15,10 @@ SOURCES = [
 
 ARCHES = ["x86_64", "aarch64"]
 
+SINGLE_SOURCES = [
+    ("actionlint-version", "actionlint-sha256", "https://github.com/rhysd/actionlint/releases/download/v{version}/actionlint_{version}_linux_amd64.tar.gz"),
+]
+
 
 def read_versions(text):
     values = {}
@@ -49,6 +53,9 @@ def main():
         for arch in ARCHES:
             url = template.format(version=versions[version_key], arch=arch)
             updates[hash_key.format(arch=arch)] = sha256(url)
+    for version_key, hash_key, template in SINGLE_SOURCES:
+        url = template.format(version=versions[version_key])
+        updates[hash_key] = sha256(url)
 
     changed = False
     for key, value in updates.items():

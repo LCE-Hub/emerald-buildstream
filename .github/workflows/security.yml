@@ -17,9 +17,15 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: taiki-e/install-action@073e1fd0bc889c9aee68dbaaa927cde1b5653a83 # v2
-        with:
-          tool: actionlint
+      - name: Install actionlint
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/.*actionlint-version: "\([^"]*\)".*/\1/p' include/versions.yml)
+          SHA=$(sed -n 's/.*actionlint-sha256: "\([^"]*\)".*/\1/p' include/versions.yml)
+          curl -fsSL -o /tmp/actionlint.tar.gz \
+            "https://github.com/rhysd/actionlint/releases/download/v${VERSION}/actionlint_${VERSION}_linux_amd64.tar.gz"
+          echo "${SHA}  /tmp/actionlint.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/actionlint.tar.gz -C /usr/local/bin actionlint
 
       - name: Validate workflows
         run: actionlint -color
