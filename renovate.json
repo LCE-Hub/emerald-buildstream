@@ -29,12 +29,64 @@
       "matchStrings": ["trivy-version:\\s*\"(?<currentValue>[0-9.]+)\""],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "aquasecurity/trivy"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/versions\\.yml$/"],
+      "matchStrings": ["renovate-version:\\s*\"(?<currentValue>[0-9.]+)\""],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "renovatebot/renovate"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/radium-versions\\.yml$/"],
+      "matchStrings": ["pugixml-ref:\\s*\"(?<currentDigest>[0-9a-f]{40})\""],
+      "datasourceTemplate": "git-tags",
+      "currentValueTemplate": "0.0.0",
+      "depNameTemplate": "zeux/pugixml"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/radium-versions\\.yml$/"],
+      "matchStrings": ["nlohmann-json-ref:\\s*\"(?<currentDigest>[0-9a-f]{40})\""],
+      "datasourceTemplate": "git-tags",
+      "currentValueTemplate": "0.0.0",
+      "depNameTemplate": "nlohmann/json"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/radium-versions\\.yml$/"],
+      "matchStrings": ["stb-ref:\\s*\"(?<currentDigest>[0-9a-f]{40})\""],
+      "datasourceTemplate": "git-tags",
+      "currentValueTemplate": "0.0.0",
+      "depNameTemplate": "nothings/stb"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/radium-versions\\.yml$/"],
+      "matchStrings": ["miniaudio-ref:\\s*\"(?<currentDigest>[0-9a-f]{40})\""],
+      "datasourceTemplate": "git-tags",
+      "currentValueTemplate": "0.0.0",
+      "depNameTemplate": "mackron/miniaudio"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/radium-versions\\.yml$/"],
+      "matchStrings": ["nanosvg-ref:\\s*\"(?<currentDigest>[0-9a-f]{40})\""],
+      "datasourceTemplate": "git-tags",
+      "currentValueTemplate": "0.0.0",
+      "depNameTemplate": "memononen/nanosvg"
     }
   ],
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
       "pinDigests": true
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": ["include/radium-versions.yml"],
+      "groupName": "radium third-party pins"
     }
   ]
 }
