@@ -30,6 +30,11 @@ jobs:
       - name: Validate workflows
         run: actionlint -color
 
+      - name: Validate Renovate config
+        run: |
+          VERSION=$(sed -n 's/.*renovate-version: "\([^"]*\)".*/\1/p' include/versions.yml)
+          npx --yes --package="renovate@${VERSION}" renovate-config-validator renovate.json
+
       - name: Audit workflows
         uses: zizmorcore/zizmor-action@1b4550e929643b8b26a62303c6bd64814271a4f1 # v0.9.2
         with:

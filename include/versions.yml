@@ -8,6 +8,7 @@ variables:
   actionlint-sha256: "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
   trivy-version: "0.76.2"
   trivy-sha256: "bc0fc726e017b8927a62b2d3531d7a84ee01769daf5c99ed866dced54089fdbf"
+  renovate-version: "41.173.1"
 
   appimagetool-version: "1.9.1"
   appimagetool-x86_64-sha256: "ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0"
