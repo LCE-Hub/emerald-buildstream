@@ -4,7 +4,7 @@ on:
   push:
     branches: [init, radium]
   pull_request:
-    branches: [radium]
+    branches: [main, radium]
   merge_group:
   workflow_dispatch:
 
@@ -12,7 +12,7 @@ permissions: {}
 
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
