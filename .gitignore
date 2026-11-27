@@ -6,6 +6,10 @@
 *.tar
 *.tar.zst
 *.AppImage
+*.flatpak
+/.flatpak-src/
+/flatpak-repo/
+/build-flatpak/
 __pycache__/
 *.pyc
 .DS_Store

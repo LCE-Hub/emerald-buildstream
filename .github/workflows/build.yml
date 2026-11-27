@@ -63,6 +63,9 @@ jobs:
           just build
           just export
 
+      - name: Build Flatpak bundle
+        run: just flatpak
+
       - name: Generate SPDX SBOM
         env:
           COMMIT_SHA: ${{ github.sha }}
@@ -95,6 +98,9 @@ jobs:
           mkdir -p artifacts
           cp -a .build-out/. artifacts/
           cp -a .build-out-binary/. artifacts/
+          if [ -f emerald-launcher.flatpak ]; then
+            cp -a emerald-launcher.flatpak artifacts/
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

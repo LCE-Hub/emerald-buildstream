@@ -33,6 +33,9 @@ sbom:
         --deps all \
         --output /src/sbom_out/emerald-launcher.spdx.json'
 
+flatpak:
+    ./scripts/build-flatpak.sh
+
 cache-pull:
     ./scripts/bst-cache-oci.sh pull
 
