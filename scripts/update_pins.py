@@ -9,12 +9,10 @@ ROOT = Path(__file__).resolve().parent.parent
 VERSIONS = ROOT / "include/versions.yml"
 
 SOURCES = [
-    ("node-version", "node-{arch}-sha256", "https://nodejs.org/dist/v{version}/node-v{version}-linux-{bst_arch}.tar.xz"),
-    ("pnpm-version", "pnpm-{arch}-sha256", "https://github.com/pnpm/pnpm/releases/download/v{version}/pnpm-linux-{bst_arch}"),
     ("appimagetool-version", "appimagetool-{arch}-sha256", "https://github.com/AppImage/appimagetool/releases/download/{version}/appimagetool-{arch}.AppImage"),
 ]
 
-ARCHES = {"x86_64": "x64", "aarch64": "arm64"}
+ARCHES = ["x86_64", "aarch64"]
 
 
 def read_versions(text):
@@ -47,8 +45,8 @@ def main():
     versions = read_versions(text)
     updates = {}
     for version_key, hash_key, template in SOURCES:
-        for arch, bst_arch in ARCHES.items():
-            url = template.format(version=versions[version_key], arch=arch, bst_arch=bst_arch)
+        for arch in ARCHES:
+            url = template.format(version=versions[version_key], arch=arch)
             updates[hash_key.format(arch=arch)] = sha256(url)
 
     changed = False

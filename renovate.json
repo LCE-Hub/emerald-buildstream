@@ -12,20 +12,6 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["/include/versions\\.yml$/"],
-      "matchStrings": ["node-version:\\s*\"(?<currentValue>[0-9.]+)\""],
-      "datasourceTemplate": "node",
-      "depNameTemplate": "node"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/include/versions\\.yml$/"],
-      "matchStrings": ["pnpm-version:\\s*\"(?<currentValue>[0-9.]+)\""],
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "pnpm/pnpm"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/include/versions\\.yml$/"],
       "matchStrings": ["appimagetool-version:\\s*\"(?<currentValue>[0-9.]+)\""],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "AppImage/appimagetool"
