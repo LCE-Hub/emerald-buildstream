@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.RENOVATE_TOKEN || secrets.GITHUB_TOKEN }}
@@ -24,6 +24,8 @@ jobs:
         run: python3 scripts/update_pins.py
 
       - name: Push pins to the PR branch
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
           if git diff --quiet -- include/versions.yml; then
@@ -34,4 +36,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add include/versions.yml
           git commit -m "chore(deps): recompute sha256 pins"
-          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+          git push origin "HEAD:${HEAD_REF}"

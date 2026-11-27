@@ -26,7 +26,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install tools
         run: |
@@ -37,7 +37,7 @@ jobs:
           /usr/local/go/bin/go install oras.land/oras/cmd/oras@v1.2.0
           echo "$HOME/go/bin" >> "$GITHUB_PATH"
 
-      - uses: taiki-e/install-action@v2
+      - uses: taiki-e/install-action@073e1fd0bc889c9aee68dbaaa927cde1b5653a83 # v2
         with:
           tool: just
 
@@ -56,6 +56,20 @@ jobs:
           just build
           just export
 
+      - name: Generate SPDX SBOM
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet buildstream==2.8.1 buildstream-plugins-community==2.5.0
+          REF=$(sed -n 's/.*sbom-ref: "\([^"]*\)".*/\1/p' include/versions.yml)
+          python3 -m pip install --quiet "git+https://gitlab.com/BuildStream/buildstream-sbom.git@${REF}"
+          mkdir -p sbom_out
+          buildstream-sbom launcher/appimage.bst \
+            --spdx-name emerald-launcher \
+            --spdx-namespace "https://github.com/LCE-Hub/emerald-buildstream/sbom/${GITHUB_SHA}" \
+            --spdx-creator "Tool: buildstream-sbom" \
+            --deps all \
+            --output sbom_out/emerald-launcher.spdx.json
+
       - name: Collect artifacts
         run: |
           mkdir -p artifacts
@@ -63,10 +77,18 @@ jobs:
           cp -a .build-out-binary/. artifacts/
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: emerald-launcher
           path: artifacts/**
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: emerald-sbom
+          path: sbom_out/**
           if-no-files-found: error
           retention-days: 14
 
