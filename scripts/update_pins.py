@@ -10,6 +10,7 @@ VERSIONS = ROOT / "include/versions.yml"
 
 SOURCES = [
     ("appimagetool-version", "appimagetool-{arch}-sha256", "https://github.com/AppImage/appimagetool/releases/download/{version}/appimagetool-{arch}.AppImage"),
+    ("type2-runtime-version", "type2-runtime-{arch}-sha256", "https://github.com/AppImage/type2-runtime/releases/download/{version}/runtime-{arch}"),
 ]
 
 ARCHES = ["x86_64", "aarch64"]
