@@ -1,6 +1,8 @@
 name: security
 
 on:
+  push:
+    branches: [main, init, radium]
   pull_request:
     branches: [main, init, radium]
   workflow_dispatch:
