@@ -25,6 +25,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -62,6 +63,26 @@ jobs:
         env:
           COMMIT_SHA: ${{ github.sha }}
         run: just sbom
+
+      - name: Scan SBOM
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/.*trivy-version: "\([^"]*\)".*/\1/p' include/versions.yml)
+          SHA=$(sed -n 's/.*trivy-sha256: "\([^"]*\)".*/\1/p' include/versions.yml)
+          curl -fsSL -o /tmp/trivy.tar.gz \
+            "https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${VERSION}_Linux-64bit.tar.gz"
+          echo "${SHA}  /tmp/trivy.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/trivy.tar.gz -C /usr/local/bin trivy
+          trivy sbom --severity HIGH,CRITICAL --no-progress --exit-code 0 \
+            --format sarif --output trivy.sarif \
+            sbom_out/emerald-launcher.spdx.json
+
+      - name: Upload Trivy SARIF
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: github/codeql-action/upload-sarif@74c1aea9df7c0f02e9b7bfe4a8935abf2e5e3aa6 # v3
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-sbom
 
       - name: Collect artifacts
         run: |
