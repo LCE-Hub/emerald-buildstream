@@ -5,6 +5,7 @@ description: Pinned Project Radium source tree and submodules
 build-depends:
 - freedesktop-sdk.bst:bootstrap/bash.bst
 - freedesktop-sdk.bst:bootstrap/coreutils.bst
+- freedesktop-sdk.bst:components/gcc-libs.bst
 
 sources:
 - kind: git_repo
