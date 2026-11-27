@@ -1,0 +1,12 @@
+/.bst/
+/.build-out/
+/.build-out-binary/
+/build/
+/dist/
+/.audit/
+*.tar
+*.tar.zst
+*.AppImage
+__pycache__/
+*.pyc
+.DS_Store

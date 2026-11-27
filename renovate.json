@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits"],
+  "baseBranchPatterns": ["init", "tauri", "radium"],
+  "rebaseWhen": "conflicted",
+  "platformAutomerge": false,
+  "schedule": ["after 10pm and before 5am every day"],
+  "timezone": "Etc/UTC",
+  "prConcurrentLimit": 5,
+  "enabledManagers": ["github-actions", "custom.regex"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/versions\\.yml$/"],
+      "matchStrings": ["node-version:\\s*\"(?<currentValue>[0-9.]+)\""],
+      "datasourceTemplate": "node",
+      "depNameTemplate": "node"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/versions\\.yml$/"],
+      "matchStrings": ["pnpm-version:\\s*\"(?<currentValue>[0-9.]+)\""],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "pnpm/pnpm"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/include/versions\\.yml$/"],
+      "matchStrings": ["appimagetool-version:\\s*\"(?<currentValue>[0-9.]+)\""],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "AppImage/appimagetool"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "pinDigests": true
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    }
+  ]
+}

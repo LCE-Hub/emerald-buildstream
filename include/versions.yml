@@ -1,0 +1,17 @@
+variables:
+  fsdk-ref: "freedesktop-sdk-26.08.4-0-g114ae909ec9881958bd507c8b4414aa33f758d2b"
+  gnome-sdk-ref: "d33d64f9cf9c1670e18e819e997524fdf7255f54"
+  plugins-ref: "2.8.0-0-g2681232038711d5c3d4ef1ecc962321c33ec72c1"
+  community-plugins-sha256: "0a08a520fb2b717877025f30d6088c3da2c204b813a5d2d786d09acf988ef29b"
+
+  node-version: "22.16.0"
+  node-x86_64-sha256: "f4cb75bb036f0d0eddf6b79d9596df1aaab9ddccd6a20bf489be5abe9467e84e"
+  node-aarch64-sha256: "eab80cb88f8fda1e65f5e8d0420c9809bdb320b03fd34976ab7161b6e703b910"
+
+  pnpm-version: "10.32.1"
+  pnpm-x86_64-sha256: "c5607a86bfb948297e96b393a53c90107766fe56329e62967b1f239d861d4363"
+  pnpm-aarch64-sha256: "c0db0b837971fde6f9781af8914e54eb163721193a36d35cbcf1794b3474a407"
+
+  appimagetool-version: "1.9.1"
+  appimagetool-x86_64-sha256: "ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0"
+  appimagetool-aarch64-sha256: "f0837e7448a0c1e4e650a93bb3e85802546e60654ef287576f46c71c126a9158"

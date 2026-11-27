@@ -1,0 +1,8 @@
+aliases:
+  github: https://github.com/
+  github_raw: https://raw.githubusercontent.com/
+  gitlab: https://gitlab.com/
+  gnome: https://gitlab.gnome.org/
+  node: https://nodejs.org/dist/
+  crates: https://static.crates.io/crates/
+  pypi: https://files.pythonhosted.org/packages/

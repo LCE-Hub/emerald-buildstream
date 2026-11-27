@@ -1,0 +1,76 @@
+name: build
+
+on:
+  push:
+    branches: [init, tauri, radium]
+  pull_request:
+    branches: [tauri, radium]
+  merge_group:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.ref_name != 'init'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    env:
+      PODMAN: sudo podman
+      BST_CACHE_REF: ghcr.io/lce-hub/emerald-buildstream-cache
+      BST_CACHE_KEY: bst-${{ runner.os }}-${{ hashFiles('project.conf', 'include/versions.yml') }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_ACTOR: ${{ github.actor }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq podman zstd curl
+          curl -fsSL https://go.dev/dl/go1.24.6.linux-amd64.tar.gz | sudo tar -C /usr/local -xz
+          echo "/usr/local/go/bin" >> "$GITHUB_PATH"
+          /usr/local/go/bin/go install oras.land/oras/cmd/oras@v1.2.0
+          echo "$HOME/go/bin" >> "$GITHUB_PATH"
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just
+
+      - name: Restore BuildStream cache
+        continue-on-error: true
+        run: just cache-pull
+
+      - name: Validate element graph
+        run: just validate
+
+      - name: Build and export
+        id: build
+        run: |
+          just build
+          just export
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: emerald-launcher
+          path: |
+            .build-out/**
+            .build-out-binary/**
+          retention-days: 14
+
+      - name: Save BuildStream cache
+        if: always()
+        continue-on-error: true
+        run: |
+          if [ "${{ steps.build.outcome }}" = "failure" ]; then
+            unset BST_CACHE_KEY
+          fi
+          just cache-push
