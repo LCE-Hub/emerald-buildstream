@@ -5,6 +5,7 @@ description: Assemble the Radium launcher AppImage from the binary tarball
 build-depends:
 - launcher/binary.bst
 - toolchains/appimagetool.bst
+- toolchains/type2-runtime.bst
 - freedesktop-sdk.bst:public-stacks/runtime-gnu.bst
 - freedesktop-sdk.bst:bootstrap/bash.bst
 - freedesktop-sdk.bst:bootstrap/coreutils.bst
@@ -26,4 +27,5 @@ config:
     ln -s usr/share/icons/hicolor/512x512/apps/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.png AppDir/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.png
     ln -s usr/share/applications/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.desktop AppDir/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.desktop
   - |
-    APPIMAGE_EXTRACT_AND_RUN=1 appimagetool AppDir '%{install-root}/emerald-launcher-%{arch}.AppImage'
+    APPIMAGE_EXTRACT_AND_RUN=1 appimagetool --runtime-file /usr/share/appimage/runtime \
+      AppDir '%{install-root}/emerald-launcher-%{arch}.AppImage'
