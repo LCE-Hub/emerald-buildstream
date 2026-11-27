@@ -17,6 +17,7 @@ ARCHES = ["x86_64", "aarch64"]
 
 SINGLE_SOURCES = [
     ("actionlint-version", "actionlint-sha256", "https://github.com/rhysd/actionlint/releases/download/v{version}/actionlint_{version}_linux_amd64.tar.gz"),
+    ("trivy-version", "trivy-sha256", "https://github.com/aquasecurity/trivy/releases/download/v{version}/trivy_{version}_Linux-64bit.tar.gz"),
 ]
 
 
