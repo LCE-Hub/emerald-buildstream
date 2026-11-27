@@ -63,6 +63,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq bubblewrap
+          sudo chown -R "${USER}:${USER}" .bst
           python3 -m pip install --quiet buildstream==2.8.1 buildstream-plugins-community==2.5.0 dulwich tomlkit
           REF=$(sed -n 's/.*sbom-ref: "\([^"]*\)".*/\1/p' include/versions.yml)
           python3 -m pip install --quiet "git+https://gitlab.com/BuildStream/buildstream-sbom.git@${REF}"
