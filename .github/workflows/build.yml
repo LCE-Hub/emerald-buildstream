@@ -27,6 +27,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Install tools
         run: |
@@ -59,6 +61,8 @@ jobs:
       - name: Generate SPDX SBOM
         run: |
           set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq bubblewrap
           python3 -m pip install --quiet buildstream==2.8.1 buildstream-plugins-community==2.5.0
           REF=$(sed -n 's/.*sbom-ref: "\([^"]*\)".*/\1/p' include/versions.yml)
           python3 -m pip install --quiet "git+https://gitlab.com/BuildStream/buildstream-sbom.git@${REF}"
