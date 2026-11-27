@@ -1,0 +1,13 @@
+variables:
+  launcher-ref: "a810c0d486eab5cbedea87fb2d6c3759181f15b3"
+  diamondruntime-ref: "86c64ecee253c16acdce826e0f09a2b184b62a6f"
+  goldmapper-ref: "0c4d9624e02e0153adcd781086f89d607bd20d50"
+  lazuli-ref: "bb10a141435a6a8158b0fb551f7a0bf558162e79"
+  shared-modules-ref: "2f1fb187252a619f4775e3126395584041b071fb"
+  discord-ipc-cpp-ref: "d711294e1eaffd3c8d6b1aca9e92dd8e32281d3a"
+
+  pugixml-ref: "ee86beb30e4973f5feffe3ce63bfa4fbadf72f38"
+  nlohmann-json-ref: "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03"
+  stb-ref: "6b5799bae8a1fe3792691ef4b72ae26434c3e799"
+  miniaudio-ref: "9634bedb5b5a2ca38c1ee7108a9358a4e233f14d"
+  nanosvg-ref: "239e102ec2c691f2902e20ace2ed36ee4a35cfe6"

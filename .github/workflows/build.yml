@@ -1,0 +1,122 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main, init, radium]
+  merge_group:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref_name != 'init'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    env:
+      PODMAN: sudo podman
+      BST_CACHE_REF: ghcr.io/lce-hub/emerald-buildstream-cache
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_ACTOR: ${{ github.actor }}
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq podman zstd curl
+          curl -fsSL https://go.dev/dl/go1.24.6.linux-amd64.tar.gz | sudo tar -C /usr/local -xz
+          echo "/usr/local/go/bin" >> "$GITHUB_PATH"
+          /usr/local/go/bin/go install oras.land/oras/cmd/oras@v1.2.0
+          echo "$HOME/go/bin" >> "$GITHUB_PATH"
+
+      - uses: taiki-e/install-action@073e1fd0bc889c9aee68dbaaa927cde1b5653a83 # v2
+        with:
+          tool: just
+
+      - name: Set cache key
+        run: echo "BST_CACHE_KEY=bst-${{ runner.os }}-${{ hashFiles('project.conf', 'include/*.yml') }}" >> "$GITHUB_ENV"
+
+      - name: Restore BuildStream cache
+        continue-on-error: true
+        run: just cache-pull
+
+      - name: Validate element graph
+        run: just validate
+
+      - name: Build and export
+        run: |
+          just build
+          just export
+
+      - name: Generate SPDX SBOM
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: just sbom
+
+      - name: Scan SBOM
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/.*trivy-version: "\([^"]*\)".*/\1/p' include/versions.yml)
+          SHA=$(sed -n 's/.*trivy-sha256: "\([^"]*\)".*/\1/p' include/versions.yml)
+          curl -fsSL -o /tmp/trivy.tar.gz \
+            "https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${VERSION}_Linux-64bit.tar.gz"
+          echo "${SHA}  /tmp/trivy.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/trivy.tar.gz -C /usr/local/bin trivy
+          trivy sbom --severity HIGH,CRITICAL --no-progress --exit-code 0 \
+            --format sarif --output trivy.sarif \
+            sbom_out/emerald-launcher.spdx.json
+          trivy sbom --severity CRITICAL --no-progress --exit-code 1 \
+            sbom_out/emerald-launcher.spdx.json
+
+      - name: Upload Trivy SARIF
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: github/codeql-action/upload-sarif@915412ff23e8b7659517e607487dbeae018f2934 # v4
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-sbom
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p artifacts
+          cp -a .build-out/. artifacts/
+          cp -a .build-out-binary/. artifacts/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: emerald-launcher
+          path: artifacts/**
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Attest artifacts
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: artifacts/**
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: emerald-sbom
+          path: sbom_out/**
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Save BuildStream cache
+        if: success()
+        continue-on-error: true
+        run: just cache-push
