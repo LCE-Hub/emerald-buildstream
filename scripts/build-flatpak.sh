@@ -13,7 +13,7 @@ flatpak install --user -y flathub org.gnome.Platform//49 org.gnome.Sdk//49
 rm -rf "$SRC" "$REPO" build-flatpak
 just bst artifact checkout launcher/src.bst --directory "/src/${SRC}"
 
-cd "$SRC/flatpak"
+cd "$SRC/src/flatpak"
 flatpak-builder --user --install-deps-from=flathub --force-clean --repo="../../${REPO}" build-flatpak "$MANIFEST"
 flatpak build-bundle "../../${REPO}" ../../emerald-launcher.flatpak \
   io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher
