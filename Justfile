@@ -1,7 +1,7 @@
 podman := env("PODMAN", "podman")
 bst2_image := env("BST2_IMAGE", "registry.gitlab.com/freedesktop-sdk/infrastructure/freedesktop-sdk-docker-images/bst2:64eb0b4930d57a92710822898fb73af6cc1ae35d")
-final_element := env("FINAL_ELEMENT", "elements/launcher/appimage.bst")
-binary_element := "elements/launcher/binary.bst"
+final_element := env("FINAL_ELEMENT", "launcher/appimage.bst")
+binary_element := "launcher/binary.bst"
 
 bst *ARGS:
     #!/usr/bin/env bash

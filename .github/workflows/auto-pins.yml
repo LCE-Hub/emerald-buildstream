@@ -3,7 +3,7 @@ name: auto-pins
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [init, tauri, radium]
+    branches: [init, radium]
     paths: ['include/versions.yml']
 
 permissions: {}

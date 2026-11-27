@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [init, tauri, radium]
+    branches: [init, radium]
   pull_request:
-    branches: [tauri, radium]
+    branches: [radium]
   merge_group:
   workflow_dispatch:
 
