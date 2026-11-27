@@ -59,21 +59,9 @@ jobs:
           just export
 
       - name: Generate SPDX SBOM
-        run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq bubblewrap
-          python3 -m venv /tmp/sbom-venv
-          /tmp/sbom-venv/bin/pip install --quiet buildstream==2.8.1 buildstream-plugins-community==2.5.0 dulwich tomlkit requests
-          REF=$(sed -n 's/.*sbom-ref: "\([^"]*\)".*/\1/p' include/versions.yml)
-          /tmp/sbom-venv/bin/pip install --quiet "git+https://gitlab.com/BuildStream/buildstream-sbom.git@${REF}"
-          mkdir -p sbom_out
-          sudo env HOME="$HOME" PATH="/tmp/sbom-venv/bin:$PATH" /tmp/sbom-venv/bin/buildstream-sbom launcher/appimage.bst \
-            --spdx-name emerald-launcher \
-            --spdx-namespace "https://github.com/LCE-Hub/emerald-buildstream/sbom/${GITHUB_SHA}" \
-            --spdx-creator "Tool: buildstream-sbom" \
-            --deps all \
-            --output sbom_out/emerald-launcher.spdx.json
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: just sbom
 
       - name: Collect artifacts
         run: |
