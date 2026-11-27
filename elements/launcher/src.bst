@@ -2,6 +2,9 @@ kind: manual
 
 description: Pinned Project Radium source tree and submodules
 
+build-depends:
+- freedesktop-sdk.bst:bootstrap/bash.bst
+
 sources:
 - kind: git_repo
   url: github:LCE-Hub/LCE-Emerald-Launcher.git
