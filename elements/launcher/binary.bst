@@ -34,6 +34,17 @@ config:
       -DEMERALD_SYSTEM_STB_DIR=/usr/include/stb \
       -DLAZULI_NANOSVG_INCLUDE_DIR=/usr/include/nanosvg
   - cmake --build build --parallel
+  - ldd -r build/src/emerald-legacy-launcher
+  - |
+    set +e
+    SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy timeout 5s \
+      build/src/emerald-legacy-launcher >/dev/null 2>&1
+    code=$?
+    set -e
+    if [ "$code" -ne 0 ] && [ "$code" -ne 124 ]; then
+      echo "launcher smoke test exited ${code}"
+      exit 1
+    fi
   - |
     mkdir -p bundle/usr/share/emerald-launcher
     install -Dm755 build/src/emerald-legacy-launcher bundle/usr/bin/emerald-legacy-launcher
