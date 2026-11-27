@@ -22,7 +22,6 @@ jobs:
     env:
       PODMAN: sudo podman
       BST_CACHE_REF: ghcr.io/lce-hub/emerald-buildstream-cache
-      BST_CACHE_KEY: bst-${{ runner.os }}-${{ hashFiles('project.conf', 'include/*.yml') }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_ACTOR: ${{ github.actor }}
     permissions:
@@ -43,6 +42,9 @@ jobs:
       - uses: taiki-e/install-action@v2
         with:
           tool: just
+
+      - name: Set cache key
+        run: echo "BST_CACHE_KEY=bst-${{ runner.os }}-${{ hashFiles('project.conf', 'include/*.yml') }}" >> "$GITHUB_ENV"
 
       - name: Restore BuildStream cache
         continue-on-error: true
