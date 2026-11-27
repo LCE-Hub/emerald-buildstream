@@ -13,6 +13,26 @@ bst *ARGS:
       -w /src "{{bst2_image}}" \
       bash -c 'bst --colors "$@"' -- --no-interactive {{ARGS}}
 
+sbom:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REF=$(sed -n 's/.*sbom-ref: "\([^"]*\)".*/\1/p' include/versions.yml)
+    mkdir -p "${HOME}/.cache/buildstream" sbom_out
+    {{podman}} run --rm --privileged --device /dev/fuse --network=host \
+      -e "SBOM_REF=${REF}" \
+      -e "COMMIT_SHA=${COMMIT_SHA:-$(git rev-parse HEAD)}" \
+      -v "{{justfile_directory()}}:/src:rw" \
+      -v "${HOME}/.cache/buildstream:/root/.cache/buildstream:rw" \
+      -w /src "{{bst2_image}}" \
+      bash -c 'python3 -m pip install --break-system-packages --quiet \
+        "git+https://gitlab.com/BuildStream/buildstream-sbom.git@${SBOM_REF}" && \
+        buildstream-sbom launcher/appimage.bst \
+        --spdx-name emerald-launcher \
+        --spdx-namespace "https://github.com/LCE-Hub/emerald-buildstream/sbom/${COMMIT_SHA}" \
+        --spdx-creator "Tool: buildstream-sbom" \
+        --deps all \
+        --output /src/sbom_out/emerald-launcher.spdx.json'
+
 cache-pull:
     ./scripts/bst-cache-oci.sh pull
 
