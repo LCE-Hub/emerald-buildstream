@@ -64,7 +64,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq bubblewrap
           python3 -m venv /tmp/sbom-venv
-          /tmp/sbom-venv/bin/pip install --quiet buildstream==2.8.1 buildstream-plugins-community==2.5.0 dulwich tomlkit
+          /tmp/sbom-venv/bin/pip install --quiet buildstream==2.8.1 buildstream-plugins-community==2.5.0 dulwich tomlkit requests
           REF=$(sed -n 's/.*sbom-ref: "\([^"]*\)".*/\1/p' include/versions.yml)
           /tmp/sbom-venv/bin/pip install --quiet "git+https://gitlab.com/BuildStream/buildstream-sbom.git@${REF}"
           mkdir -p sbom_out
