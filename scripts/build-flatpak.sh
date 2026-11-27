@@ -17,5 +17,5 @@ sed -i 's/--device=input/--device=all/' "$SRC/src/flatpak/$MANIFEST"
 
 cd "$SRC/src/flatpak"
 flatpak-builder --user --install-deps-from=flathub --force-clean --repo="../../${REPO}" build-flatpak "$MANIFEST"
-flatpak build-bundle "../../${REPO}" ../../emerald-launcher.flatpak \
+flatpak build-bundle "../../${REPO}" ../../../emerald-launcher.flatpak \
   io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher
