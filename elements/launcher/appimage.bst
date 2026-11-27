@@ -23,6 +23,7 @@ config:
     EOF
     chmod 755 AppDir/AppRun
     ln -s usr/share/icons/hicolor/512x512/apps/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.png AppDir/.DirIcon
+    ln -s usr/share/icons/hicolor/512x512/apps/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.png AppDir/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.png
     ln -s usr/share/applications/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.desktop AppDir/io.github.Emerald_Legacy_Launcher.Emerald_Legacy_Launcher.desktop
   - |
     APPIMAGE_EXTRACT_AND_RUN=1 appimagetool AppDir '%{install-root}/emerald-launcher-%{arch}.AppImage'
